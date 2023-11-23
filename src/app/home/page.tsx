@@ -19,12 +19,22 @@ const Page = () => {
     setProcesses(fakeProcesses);
   }, []);
 
-  const handleBurstDurationChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const newProcesses = [...processes];
-    newProcesses[index].burstDuration = e.target.value;
+    newProcesses[index] = {
+      ...newProcesses[index],
+      [e.target.name]: e.target.value,
+    };
+    setProcesses(newProcesses);
+  };
+
+  const removeProcess = (processIndex: number) => {
+    let newProcesses = [...processes];
+    newProcesses.splice(processIndex, 1);
+    newProcesses = newProcesses.map((process, index) => ({
+      ...process,
+      id: index + 1,
+    }));
     setProcesses(newProcesses);
   };
 
@@ -59,19 +69,27 @@ const Page = () => {
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
                       <input
-                        type="text"
+                        type="number"
                         value={String(process.burstDuration)}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="10s"
                         required
-                        onChange={(e) => handleBurstDurationChange(e, index)}
+                        name="burstDuration"
+                        onChange={(e) => handleChange(e, index)}
                       />
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
-                      {process.priority}
+                      <input
+                        type="number"
+                        value={String(process.priority)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="10s"
+                        name="priority"
+                        onChange={(e) => handleChange(e, index)}
+                      />
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
-                      X
+                      <span onClick={() => removeProcess(index)}>X</span>
                     </td>
                   </tr>
                 );

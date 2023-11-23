@@ -1,28 +1,37 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 
 type Process = {
-  id: number | null;
-  burstDuration: number | null;
-  priority: number | null;
+  id: number;
+  burstDuration: string;
+  priority: string;
 };
 
 const fakeProcesses: Process[] = [
-  { id: 1, burstDuration: 10, priority: 1 },
-  { id: 2, burstDuration: 5, priority: 2 },
+  { id: 1, burstDuration: "10", priority: "1" },
+  { id: 2, burstDuration: "5", priority: "2" },
 ];
 
-const Page = (props) => {
+const Page = () => {
   const [processes, setProcesses] = useState<Process[]>([]);
 
   useEffect(() => {
     setProcesses(fakeProcesses);
   }, []);
 
+  const handleBurstDurationChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const newProcesses = [...processes];
+    newProcesses[index].burstDuration = e.target.value;
+    setProcesses(newProcesses);
+  };
+
   const addProcess = () => {
     setProcesses([
       ...processes,
-      { id: processes.length + 1, burstDuration: null, priority: null },
+      { id: processes.length + 1, burstDuration: "", priority: "" },
     ]);
   };
 
@@ -42,14 +51,21 @@ const Page = (props) => {
               </tr>
             </thead>
             <tbody>
-              {processes.map((process) => {
+              {processes.map((process, index) => {
                 return (
                   <tr key={process.id}>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
                       {process.id}
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
-                      {process.burstDuration}
+                      <input
+                        type="text"
+                        value={String(process.burstDuration)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="10s"
+                        required
+                        onChange={(e) => handleBurstDurationChange(e, index)}
+                      />
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
                       {process.priority}

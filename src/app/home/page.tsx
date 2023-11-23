@@ -1,5 +1,8 @@
 "use client";
 import { useEffect, useState, ChangeEvent } from "react";
+import CanvasJSReact from "@canvasjs/react-charts";
+
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 type Process = {
   id: number;
@@ -15,8 +18,76 @@ const fakeProcesses: Process[] = [
 const Page = () => {
   const [processes, setProcesses] = useState<Process[]>([]);
 
+  const [options, setOptions] = useState({
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Evening Sales in a Restaurant",
+    },
+    axisX: {
+      valueFormatString: "-",
+    },
+    axisY: {
+      suffix: "ms",
+    },
+    toolTip: {
+      shared: true,
+    },
+    legend: {
+      cursor: "pointer",
+      // itemclick: (e) => console.log(e),
+    },
+    data: [
+      {
+        type: "stackedBar",
+        name: "Meals",
+        showInLegend: "true",
+
+        dataPoints: [{ x: 1, y: 10 }],
+        color: "blue",
+      },
+      {
+        type: "stackedBar",
+        name: "Snacks",
+        showInLegend: "true",
+
+        dataPoints: [{ x: 1, y: 20 }],
+        color: "purple",
+      },
+      {
+        type: "stackedBar",
+        name: "Drinks",
+        showInLegend: "true",
+
+        dataPoints: [{ x: 1, y: 30 }],
+      },
+      {
+        type: "stackedBar",
+        name: "Dessert",
+        showInLegend: "true",
+
+        dataPoints: [{ x: 1, y: 40 }],
+      },
+      {
+        type: "stackedBar",
+        name: "Takeaway",
+        showInLegend: "true",
+
+        dataPoints: [{ x: 1, y: 60 }],
+      },
+    ],
+  });
+
   useEffect(() => {
     setProcesses(fakeProcesses);
+  }, []);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      console.log("Blaaa");
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -106,7 +177,9 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div>Simulation</div>
+      <div>
+        <CanvasJSChart options={options} />
+      </div>
     </div>
   );
 };

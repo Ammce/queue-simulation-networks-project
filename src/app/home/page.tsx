@@ -43,9 +43,6 @@ const Page = () => {
   const [options, setOptions] = useState<ChartOptions>({
     animationEnabled: true,
     theme: "dark2",
-    title: {
-      text: "FIFO Queue simulation",
-    },
     axisX: {
       valueFormatString: "-",
     },
@@ -126,10 +123,8 @@ const Page = () => {
 
   return (
     <div>
-      <div>Heading</div>
-      <div>
-        <div>Instructions</div>
-        <div className="rounded-t-xl overflow-hidden bg-gradient-to-r">
+      <div className="flex">
+        <div className="flex-1 flex flex-col justify-center items-center rounded-t-xl overflow-hidden bg-gradient-to-r">
           <table className="table-auto">
             <thead>
               <tr>
@@ -143,15 +138,14 @@ const Page = () => {
               {processes.map((process, index) => {
                 return (
                   <tr key={process.id}>
-                    <td className="border border-emerald-500  text-emerald-600 font-medium">
+                    <td className="w-22 text-center border border-emerald-500  text-emerald-600 font-medium">
                       {process.id}
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
                       <input
                         type="number"
                         value={String(process.burstDuration)}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="10s"
+                        className="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         required
                         name="burstDuration"
                         onChange={(e) => handleChange(e, index)}
@@ -161,37 +155,79 @@ const Page = () => {
                       <input
                         type="number"
                         value={String(process.priority)}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="10s"
+                        className="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         name="priority"
                         onChange={(e) => handleChange(e, index)}
                       />
                     </td>
-                    <td className="border border-emerald-500  text-emerald-600 font-medium">
-                      <span onClick={() => removeProcess(index)}>X</span>
+                    <td className="w-12 border border-emerald-500  text-emerald-600 font-medium">
+                      <div className="flex items-center justify-center">
+                        <svg
+                          onClick={() => removeProcess(index)}
+                          className="w-6 h-6 text-gray-800 dark:text-red-600 cursor-pointer"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m13 7-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
+                      </div>
                     </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
-          <div>
+          <div className="mt-3 mb-3">
             <button
               onClick={addProcess}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              type="button"
+              className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2"
             >
+              <svg
+                className="ww-6 h-5 me-2 -ms-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.546.5a9.5 9.5 0 1 0 9.5 9.5 9.51 9.51 0 0 0-9.5-9.5ZM13.788 11h-3.242v3.242a1 1 0 1 1-2 0V11H5.304a1 1 0 0 1 0-2h3.242V5.758a1 1 0 0 1 2 0V9h3.242a1 1 0 1 1 0 2Z" />
+              </svg>
               Add process
             </button>
-          </div>
-          <div>
-            <h3> Controls </h3>
             <button
               onClick={simulateQueue}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              type="button"
+              className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2"
             >
-              Simulate queue
+              <svg
+                className="ww-6 h-5 me-2 -ms-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 16 18"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 1.984v14.032a1 1 0 0 0 1.506.845l12.006-7.016a.974.974 0 0 0 0-1.69L2.506 1.139A1 1 0 0 0 1 1.984Z"
+                />
+              </svg>
+              Simulate Queue
             </button>
           </div>
+        </div>
+        <div className="flex-1 flex flex-col justify-center items-center">
+          Instructions
         </div>
       </div>
       {isSimulating && (

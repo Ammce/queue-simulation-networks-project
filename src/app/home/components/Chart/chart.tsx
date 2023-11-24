@@ -1,6 +1,5 @@
 import CanvasJSReact from "@canvasjs/react-charts";
 import { ChartOptions } from "../../types";
-import { useEffect } from "react";
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 type IProps = {

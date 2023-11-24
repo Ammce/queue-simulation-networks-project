@@ -1,9 +1,6 @@
 export type ChartOptions = {
   animationEnabled: boolean;
   theme: string;
-  title: {
-    text: string;
-  };
   axisX: {
     valueFormatString: string;
   };

@@ -1,8 +1,26 @@
 "use client";
 import { useEffect, useState, ChangeEvent } from "react";
-import CanvasJSReact from "@canvasjs/react-charts";
+import { ChartOptions } from "./types";
+import { Chart } from "./components/Chart/chart";
+import { v1 } from "uuid";
 
-const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+function getRandomColor() {
+  // Generate random values for red, green, and blue components
+  const red = Math.floor(Math.random() * 256);
+  const green = Math.floor(Math.random() * 256);
+  const blue = Math.floor(Math.random() * 256);
+
+  // Convert the values to hexadecimal and format as a CSS color code
+  const color = `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
+
+  return color;
+}
+
+// Helper function to convert a decimal value to a two-digit hexadecimal value
+function toHex(decimalValue: number) {
+  const hex = decimalValue.toString(16);
+  return hex.length === 1 ? "0" + hex : hex;
+}
 
 type Process = {
   id: number;
@@ -11,24 +29,29 @@ type Process = {
 };
 
 const fakeProcesses: Process[] = [
-  { id: 1, burstDuration: "10", priority: "1" },
+  { id: 1, burstDuration: "10", priority: "" },
   { id: 2, burstDuration: "5", priority: "2" },
+  { id: 3, burstDuration: "15", priority: "" },
+  { id: 4, burstDuration: "20", priority: "4" },
 ];
 
 const Page = () => {
   const [processes, setProcesses] = useState<Process[]>([]);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [renderId, setRenderId] = useState("renrer-id");
 
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useState<ChartOptions>({
     animationEnabled: true,
-    theme: "light2",
+    theme: "dark2",
     title: {
-      text: "Evening Sales in a Restaurant",
+      text: "FIFO Queue simulation",
     },
     axisX: {
       valueFormatString: "-",
     },
     axisY: {
       suffix: "ms",
+      minimum: 0,
     },
     toolTip: {
       shared: true,
@@ -37,57 +60,11 @@ const Page = () => {
       cursor: "pointer",
       // itemclick: (e) => console.log(e),
     },
-    data: [
-      {
-        type: "stackedBar",
-        name: "Meals",
-        showInLegend: "true",
-
-        dataPoints: [{ x: 1, y: 10 }],
-        color: "blue",
-      },
-      {
-        type: "stackedBar",
-        name: "Snacks",
-        showInLegend: "true",
-
-        dataPoints: [{ x: 1, y: 20 }],
-        color: "purple",
-      },
-      {
-        type: "stackedBar",
-        name: "Drinks",
-        showInLegend: "true",
-
-        dataPoints: [{ x: 1, y: 30 }],
-      },
-      {
-        type: "stackedBar",
-        name: "Dessert",
-        showInLegend: "true",
-
-        dataPoints: [{ x: 1, y: 40 }],
-      },
-      {
-        type: "stackedBar",
-        name: "Takeaway",
-        showInLegend: "true",
-
-        dataPoints: [{ x: 1, y: 60 }],
-      },
-    ],
+    data: [],
   });
 
   useEffect(() => {
     setProcesses(fakeProcesses);
-  }, []);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      console.log("Blaaa");
-    }, 2000);
-
-    return () => clearTimeout(timeoutId);
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -114,6 +91,37 @@ const Page = () => {
       ...processes,
       { id: processes.length + 1, burstDuration: "", priority: "" },
     ]);
+  };
+
+  const simulateQueue = () => {
+    setRenderId(v1());
+    const formattedData = processes
+      .map((process) => {
+        return {
+          type: "stackedBar",
+          name: `P${process.id}`,
+          showInLegend: "true",
+          dataPoints: [{ x: 0, y: Number(process.burstDuration) }],
+          color: getRandomColor(),
+          priority: process.priority,
+        };
+      })
+      .sort((a, b) => {
+        const priorityA = a.priority;
+        const priorityB = b.priority;
+
+        if (priorityA === "") {
+          return 1;
+        } else if (priorityB === "") {
+          return -1;
+        } else {
+          return Number(priorityA) - Number(priorityB);
+        }
+      });
+
+    setOptions({ ...options, data: formattedData });
+
+    setIsSimulating(true);
   };
 
   return (
@@ -175,11 +183,22 @@ const Page = () => {
               Add process
             </button>
           </div>
+          <div>
+            <h3> Controls </h3>
+            <button
+              onClick={simulateQueue}
+              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            >
+              Simulate queue
+            </button>
+          </div>
         </div>
       </div>
-      <div>
-        <CanvasJSChart options={options} />
-      </div>
+      {isSimulating && (
+        <div>
+          <Chart options={options} renderId={renderId} />
+        </div>
+      )}
     </div>
   );
 };

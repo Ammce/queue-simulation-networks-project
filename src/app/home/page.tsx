@@ -107,7 +107,7 @@ const Page = () => {
 
   return (
     <div>
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         <div className="flex-1 flex flex-col justify-center items-center rounded-t-xl overflow-hidden bg-gradient-to-r p-8">
           <table className="table-auto">
             <thead>
@@ -211,7 +211,7 @@ const Page = () => {
           </div>
         </div>
         <div className="flex-1 flex flex-col justify-center items-center bg-emerald-900 text-white">
-          <div className="p-10 rounded-md shadow-md shadow-emerald-500">
+          <div className="hidden sm:block p-10 rounded-md shadow-md shadow-emerald-500">
             <h2 className="text-3xl font-bold mb-4 pb-2 border-b-2 border-white">
               About Project
             </h2>

@@ -3,24 +3,7 @@ import { useEffect, useState, ChangeEvent } from "react";
 import { ChartOptions } from "./types";
 import { Chart } from "./components/Chart/chart";
 import { v1 } from "uuid";
-
-function getRandomColor() {
-  // Generate random values for red, green, and blue components
-  const red = Math.floor(Math.random() * 256);
-  const green = Math.floor(Math.random() * 256);
-  const blue = Math.floor(Math.random() * 256);
-
-  // Convert the values to hexadecimal and format as a CSS color code
-  const color = `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
-
-  return color;
-}
-
-// Helper function to convert a decimal value to a two-digit hexadecimal value
-function toHex(decimalValue: number) {
-  const hex = decimalValue.toString(16);
-  return hex.length === 1 ? "0" + hex : hex;
-}
+import { getRandomColor } from "@/utils";
 
 type Process = {
   id: number;

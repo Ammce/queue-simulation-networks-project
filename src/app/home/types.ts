@@ -13,7 +13,7 @@ export type ChartOptions = {
   };
   legend: {
     cursor: string;
-    // itemclick?: (e: any) => void; // Uncomment if you want to include the itemclick property
+    verticalAlign: string;
   };
   data: Array<{
     type: string;

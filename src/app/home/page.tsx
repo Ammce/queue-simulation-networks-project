@@ -30,9 +30,9 @@ type Process = {
 
 const fakeProcesses: Process[] = [
   { id: 1, burstDuration: "10", priority: "" },
-  { id: 2, burstDuration: "5", priority: "2" },
+  { id: 2, burstDuration: "5", priority: "1" },
   { id: 3, burstDuration: "15", priority: "" },
-  { id: 4, burstDuration: "20", priority: "4" },
+  { id: 4, burstDuration: "7", priority: "2" },
 ];
 
 const Page = () => {
@@ -55,6 +55,7 @@ const Page = () => {
     },
     legend: {
       cursor: "pointer",
+      verticalAlign: "top",
       // itemclick: (e) => console.log(e),
     },
     data: [],
@@ -124,7 +125,7 @@ const Page = () => {
   return (
     <div>
       <div className="flex">
-        <div className="flex-1 flex flex-col justify-center items-center rounded-t-xl overflow-hidden bg-gradient-to-r">
+        <div className="flex-1 flex flex-col justify-center items-center rounded-t-xl overflow-hidden bg-gradient-to-r p-8">
           <table className="table-auto">
             <thead>
               <tr>
@@ -226,8 +227,28 @@ const Page = () => {
             </button>
           </div>
         </div>
-        <div className="flex-1 flex flex-col justify-center items-center">
-          Instructions
+        <div className="flex-1 flex flex-col justify-center items-center bg-emerald-900 text-white">
+          <div className="p-10 rounded-md shadow-md shadow-emerald-500">
+            <h2 className="text-3xl font-bold mb-4 pb-2 border-b-2 border-white">
+              About Project
+            </h2>
+            <div className="mb-4">
+              <span className="font-semibold">Course:</span>
+              <span className="ml-2">Computer Networks</span>
+            </div>
+            <div className="mb-4">
+              <span className="font-semibold">Professor:</span>
+              <span className="ml-2">Andrej Stefanov</span>
+            </div>
+            <div className="mb-4">
+              <span className="font-semibold">Project:</span>
+              <span className="ml-2">FIFO Queue Simulation</span>
+            </div>
+            <div>
+              <span className="font-semibold">Student:</span>
+              <span className="ml-2">Amel Muminovic</span>
+            </div>
+          </div>
         </div>
       </div>
       {isSimulating && (

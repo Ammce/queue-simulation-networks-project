@@ -1,3 +1,12 @@
+export type ChartData = {
+  type: string;
+  name: string;
+  showInLegend: string;
+  dataPoints: Array<{ x: number; y: number }>;
+  color: string;
+  priority: string;
+};
+
 export type ChartOptions = {
   animationEnabled: boolean;
   theme: string;
@@ -20,12 +29,5 @@ export type ChartOptions = {
     cursor: string;
     verticalAlign: string;
   };
-  data: Array<{
-    type: string;
-    name: string;
-    showInLegend: string;
-    dataPoints: Array<{ x: number; y: number }>;
-    color: string;
-    priority: string;
-  }>;
+  data: Array<ChartData>;
 };

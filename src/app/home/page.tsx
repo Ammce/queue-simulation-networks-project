@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, ChangeEvent } from "react";
-import { ChartOptions } from "./types";
+import { ChartData, ChartOptions } from "./types";
 import { Chart } from "./components/Chart/chart";
 import { v1 } from "uuid";
 import { getRandomColor } from "@/utils";
@@ -11,7 +11,7 @@ type Process = {
   priority: string;
 };
 
-const fakeProcesses: Process[] = [
+const initialProcesses: Process[] = [
   { id: 1, burstDuration: "10", priority: "" },
   { id: 2, burstDuration: "8", priority: "" },
   { id: 3, burstDuration: "4", priority: "" },
@@ -50,7 +50,7 @@ const Page = () => {
   });
 
   useEffect(() => {
-    setProcesses(fakeProcesses);
+    setProcesses(initialProcesses);
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -81,7 +81,7 @@ const Page = () => {
 
   const simulateQueue = () => {
     setRenderId(v1());
-    const formattedData = processes
+    const formattedData: ChartData[] = processes
       .map((process) => {
         return {
           type: "stackedBar",
@@ -105,23 +105,7 @@ const Page = () => {
         }
       });
 
-    const avgWaitingTime =
-      formattedData
-        .reduce((acc: number[], curr, index) => {
-          if (index === formattedData.length - 1) {
-            return acc;
-          }
-          const currentValue = curr.dataPoints[0].y;
-          acc.push(
-            acc.length === 0
-              ? currentValue
-              : acc[acc.length - 1] + currentValue,
-          );
-          return acc;
-        }, [])
-        .reduce((acc, curr) => {
-          return acc + curr;
-        }, 0) / formattedData.length;
+    const avgWaitingTime = calculateAverageWaitingTime(formattedData);
 
     setOptions({
       ...options,
@@ -135,7 +119,26 @@ const Page = () => {
     setIsSimulating(true);
   };
 
-  const calculateAverageWaitingTime = () => {};
+  const calculateAverageWaitingTime = (data: ChartData[]) => {
+    return (
+      data
+        .reduce((acc: number[], curr, index) => {
+          if (index === data.length - 1) {
+            return acc;
+          }
+          const currentValue = curr.dataPoints[0].y;
+          acc.push(
+            acc.length === 0
+              ? currentValue
+              : acc[acc.length - 1] + currentValue,
+          );
+          return acc;
+        }, [])
+        .reduce((acc, curr) => {
+          return acc + curr;
+        }, 0) / data.length
+    );
+  };
 
   return (
     <div>

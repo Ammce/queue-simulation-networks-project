@@ -13,9 +13,9 @@ type Process = {
 
 const fakeProcesses: Process[] = [
   { id: 1, burstDuration: "10", priority: "" },
-  { id: 2, burstDuration: "5", priority: "1" },
-  { id: 3, burstDuration: "15", priority: "" },
-  { id: 4, burstDuration: "7", priority: "2" },
+  { id: 2, burstDuration: "8", priority: "" },
+  { id: 3, burstDuration: "4", priority: "" },
+  { id: 4, burstDuration: "6", priority: "" },
 ];
 
 const Page = () => {
@@ -28,6 +28,11 @@ const Page = () => {
     theme: "dark2",
     axisX: {
       valueFormatString: "-",
+    },
+    title: {
+      text: "Average waiting time: 9.75ms",
+      fontSize: 16,
+      padding: 10, // You can adjust the padding as needed
     },
     axisY: {
       suffix: "ms",
@@ -100,10 +105,37 @@ const Page = () => {
         }
       });
 
-    setOptions({ ...options, data: formattedData });
+    const avgWaitingTime =
+      formattedData
+        .reduce((acc: number[], curr, index) => {
+          if (index === formattedData.length - 1) {
+            return acc;
+          }
+          const currentValue = curr.dataPoints[0].y;
+          acc.push(
+            acc.length === 0
+              ? currentValue
+              : acc[acc.length - 1] + currentValue,
+          );
+          return acc;
+        }, [])
+        .reduce((acc, curr) => {
+          return acc + curr;
+        }, 0) / formattedData.length;
+
+    setOptions({
+      ...options,
+      title: {
+        ...options.title,
+        text: `Average waiting time is: ${avgWaitingTime.toFixed(1)} ms`,
+      },
+      data: formattedData,
+    });
 
     setIsSimulating(true);
   };
+
+  const calculateAverageWaitingTime = () => {};
 
   return (
     <div>
@@ -113,7 +145,7 @@ const Page = () => {
             <thead>
               <tr>
                 <th className=" text-emerald-600">Process</th>
-                <th className=" text-emerald-600">Burst duration</th>
+                <th className=" text-emerald-600">Burst duration (ms)</th>
                 <th className=" text-emerald-600">Priority</th>
                 <th className=" text-emerald-600"></th>
               </tr>
@@ -122,8 +154,8 @@ const Page = () => {
               {processes.map((process, index) => {
                 return (
                   <tr key={process.id}>
-                    <td className="w-22 text-center border border-emerald-500  text-emerald-600 font-medium">
-                      {process.id}
+                    <td className="w-20 text-center border border-emerald-500  text-emerald-600 font-medium">
+                      <div className="w-20">{process.id}</div>
                     </td>
                     <td className="border border-emerald-500  text-emerald-600 font-medium">
                       <input
@@ -225,7 +257,7 @@ const Page = () => {
             </div>
             <div className="mb-4">
               <span className="font-semibold">Project:</span>
-              <span className="ml-2">FIFO Queue Simulation</span>
+              <span className="ml-2">FCFS Scheduler Simulation</span>
             </div>
             <div>
               <span className="font-semibold">Student:</span>

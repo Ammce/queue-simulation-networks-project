@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Queue Simulation for Networks project",
+  title: "FCFS Scheduler for Networks project",
   description: "Developed by Amel Muminovic",
 };
 

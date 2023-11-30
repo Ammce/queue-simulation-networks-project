@@ -8,6 +8,11 @@ export type ChartOptions = {
     suffix: string;
     minimum?: number;
   };
+  title: {
+    text: string;
+    fontSize: number;
+    padding: number;
+  };
   toolTip: {
     shared: boolean;
   };

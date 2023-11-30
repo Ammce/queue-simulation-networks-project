@@ -1,9 +1,13 @@
 "use client";
 import { useEffect, useState, ChangeEvent } from "react";
 import { ChartData, ChartOptions } from "./types";
-import { Chart } from "./components/Chart/chart";
 import { v1 } from "uuid";
 import { getRandomColor } from "@/utils";
+import dynamic from "next/dynamic";
+
+const StockChart = dynamic(() => import("./components/Chart/chart"), {
+  ssr: false,
+});
 
 type Process = {
   id: number;
@@ -12,10 +16,10 @@ type Process = {
 };
 
 const initialProcesses: Process[] = [
-  { id: 1, burstDuration: "10", priority: "" },
-  { id: 2, burstDuration: "8", priority: "" },
-  { id: 3, burstDuration: "4", priority: "" },
-  { id: 4, burstDuration: "6", priority: "" },
+  { id: 1, burstDuration: "10", priority: "2" },
+  { id: 2, burstDuration: "8", priority: "3" },
+  { id: 3, burstDuration: "4", priority: "4" },
+  { id: 4, burstDuration: "6", priority: "1" },
 ];
 
 const Page = () => {
@@ -271,7 +275,7 @@ const Page = () => {
       </div>
       {isSimulating && (
         <div>
-          <Chart options={options} renderId={renderId} />
+          <StockChart options={options} renderId={renderId} />
         </div>
       )}
     </div>

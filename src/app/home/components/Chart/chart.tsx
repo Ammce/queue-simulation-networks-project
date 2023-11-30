@@ -7,10 +7,12 @@ type IProps = {
   renderId: string;
 };
 
-export const Chart = ({ options, renderId }: IProps) => {
+const Chart = ({ options, renderId }: IProps) => {
   return (
     <div key={renderId}>
       <CanvasJSChart options={options} />
     </div>
   );
 };
+
+export default Chart;

@@ -83,20 +83,25 @@ const Page = () => {
     ]);
   };
 
-  const simulateQueue = () => {
+  const simulateQueue = ({
+    enablePriorities,
+  }: {
+    enablePriorities: boolean;
+  }) => {
     setRenderId(v1());
-    const formattedData: ChartData[] = processes
-      .map((process) => {
-        return {
-          type: "stackedBar",
-          name: `P${process.id}`,
-          showInLegend: "true",
-          dataPoints: [{ x: 0, y: Number(process.burstDuration) }],
-          color: getRandomColor(),
-          priority: process.priority,
-        };
-      })
-      .sort((a, b) => {
+    const formattedData: ChartData[] = processes.map((process) => {
+      return {
+        type: "stackedBar",
+        name: `P${process.id}`,
+        showInLegend: "true",
+        dataPoints: [{ x: 0, y: Number(process.burstDuration) }],
+        color: getRandomColor(),
+        priority: process.priority,
+      };
+    });
+
+    if (enablePriorities) {
+      formattedData.sort((a, b) => {
         const priorityA = a.priority;
         const priorityB = b.priority;
 
@@ -108,6 +113,7 @@ const Page = () => {
           return Number(priorityA) - Number(priorityB);
         }
       });
+    }
 
     const avgWaitingTime = calculateAverageWaitingTime(formattedData);
 
@@ -206,27 +212,32 @@ const Page = () => {
                   </tr>
                 );
               })}
+              <tr>
+                <td>
+                  <div
+                    className="cursor-pointer flex items-center justify-center w-full mt-[16px]"
+                    onClick={addProcess}
+                  >
+                    <svg
+                      className="ww-6 h-5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.546.5a9.5 9.5 0 1 0 9.5 9.5 9.51 9.51 0 0 0-9.5-9.5ZM13.788 11h-3.242v3.242a1 1 0 1 1-2 0V11H5.304a1 1 0 0 1 0-2h3.242V5.758a1 1 0 0 1 2 0V9h3.242a1 1 0 1 1 0 2Z" />
+                    </svg>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
+
+          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700 w-full" />
+
           <div className="mt-3 mb-3">
             <button
-              onClick={addProcess}
-              type="button"
-              className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2"
-            >
-              <svg
-                className="ww-6 h-5 me-2 -ms-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.546.5a9.5 9.5 0 1 0 9.5 9.5 9.51 9.51 0 0 0-9.5-9.5ZM13.788 11h-3.242v3.242a1 1 0 1 1-2 0V11H5.304a1 1 0 0 1 0-2h3.242V5.758a1 1 0 0 1 2 0V9h3.242a1 1 0 1 1 0 2Z" />
-              </svg>
-              Add process
-            </button>
-            <button
-              onClick={simulateQueue}
+              onClick={() => simulateQueue({ enablePriorities: false })}
               type="button"
               className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2"
             >
@@ -246,6 +257,28 @@ const Page = () => {
                 />
               </svg>
               Simulate Queue
+            </button>
+            <button
+              onClick={() => simulateQueue({ enablePriorities: true })}
+              type="button"
+              className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2"
+            >
+              <svg
+                className="ww-6 h-5 me-2 -ms-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 16 18"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 1.984v14.032a1 1 0 0 0 1.506.845l12.006-7.016a.974.974 0 0 0 0-1.69L2.506 1.139A1 1 0 0 0 1 1.984Z"
+                />
+              </svg>
+              Simulate Queue With Priorities
             </button>
           </div>
         </div>

@@ -79,7 +79,11 @@ const Page = () => {
   const addProcess = () => {
     setProcesses([
       ...processes,
-      { id: processes.length + 1, burstDuration: "", priority: "" },
+      {
+        id: processes.length + 1,
+        burstDuration: String(Math.floor(Math.random() * 20) + 1),
+        priority: "",
+      },
     ]);
   };
 

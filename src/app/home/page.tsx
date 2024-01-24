@@ -82,7 +82,7 @@ const Page = () => {
       {
         id: processes.length + 1,
         burstDuration: String(Math.floor(Math.random() * 20) + 1),
-        priority: "",
+        priority: String(processes.length + 1),
       },
     ]);
   };
